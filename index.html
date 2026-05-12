@@ -548,14 +548,165 @@
   .sum-key{font-size:13px;color:var(--white-dim);}
   .sum-val{font-size:13px;font-weight:600;}
 
+  /* ─── HAMBURGER BUTTON ─── */
+  .hamburger{
+    display:none;
+    width:38px;height:38px;
+    background:var(--black-3);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:var(--radius-sm);
+    align-items:center;justify-content:center;
+    cursor:pointer;
+    flex-direction:column;gap:5px;
+    flex-shrink:0;
+  }
+  .hamburger span{
+    display:block;width:18px;height:2px;
+    background:var(--white-dim);
+    border-radius:2px;
+    transition:all .25s;
+  }
+
+  /* ─── SIDEBAR OVERLAY ─── */
+  .sidebar-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(0,0,0,0.6);
+    z-index:99;
+    backdrop-filter:blur(2px);
+  }
+  .sidebar-overlay.open{display:block;}
+
   /* ─── RESPONSIVE ─── */
-  @media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:900px){
-    .sidebar{transform:translateX(-100%);}
+  @media(max-width:1200px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  }
+
+  @media(max-width:960px){
+    .topbar-search{width:200px;}
+  }
+
+  @media(max-width:768px){
+    /* Sidebar */
+    .sidebar{
+      transform:translateX(-100%);
+      z-index:200;
+      width:280px;
+    }
     .sidebar.open{transform:none;}
+
+    /* Main layout */
     .main{margin-left:0;}
+
+    /* Topbar */
+    .topbar{padding:0 16px;gap:10px;height:56px;}
+    .topbar-title{font-size:17px;}
+    .topbar-search{display:none;}
+    .hamburger{display:flex;}
+
+    /* Pages */
+    .page{padding:16px;gap:18px;}
+
+    /* KPI grid */
+    .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .kpi-card{padding:16px 16px;}
+    .kpi-value{font-size:22px;}
+    .kpi-icon{font-size:22px;}
+
+    /* Dashboard hero */
+    .dash-hero{padding:24px 22px;}
+    .dash-hero-quote{font-size:16px;}
+    .dash-hero::after{font-size:120px;top:-5px;left:16px;}
+
+    /* Two / three cols */
     .two-cols,.three-cols{grid-template-columns:1fr;}
+
+    /* Tables — horizontal scroll */
+    .table-wrap{overflow-x:auto;}
+    .table-wrap table{min-width:520px;}
+    .table-toolbar{
+      flex-wrap:wrap;gap:10px;
+      padding:14px 16px;
+    }
+    .table-toolbar .tbl-search{margin-left:0;width:100%;order:3;}
+    .table-toolbar .tbl-search input{width:100%;}
+    .table-toolbar .btn{order:2;}
+    th,td{padding:11px 14px;font-size:12.5px;}
+
+    /* Forms */
     .form-grid{grid-template-columns:1fr;}
+    .form-grid [style*="grid-column"]{grid-column:1 !important;}
+
+    /* Modals */
+    .modal-overlay{align-items:flex-end;}
+    .modal{
+      max-width:100% !important;
+      width:100%;
+      border-radius:var(--radius) var(--radius) 0 0;
+      max-height:92vh;
+    }
+    .modal-header{padding:20px 20px 16px;}
+    .modal-body{padding:16px 20px;}
+    .modal-footer{padding:12px 20px 20px;flex-direction:column;}
+    .modal-footer .btn{width:100%;justify-content:center;}
+
+    /* Stat blocks */
+    .stat-block{padding:16px;}
+
+    /* Toast */
+    #toast-container{top:auto;bottom:80px;right:12px;left:12px;}
+    .toast{min-width:unset;max-width:100%;}
+
+    /* Bottom nav bar */
+    .bottom-nav{display:flex;}
+  }
+
+  @media(max-width:400px){
+    .kpi-grid{grid-template-columns:1fr;}
+    .topbar-title{font-size:15px;}
+  }
+
+  /* ─── BOTTOM NAV (mobile only) ─── */
+  .bottom-nav{
+    display:none;
+    position:fixed;bottom:0;left:0;right:0;
+    height:60px;
+    background:var(--black-2);
+    border-top:1px solid rgba(255,255,255,0.08);
+    z-index:150;
+    align-items:stretch;
+    justify-content:space-around;
+  }
+  .bottom-nav-item{
+    flex:1;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:3px;
+    cursor:pointer;
+    padding:6px 4px;
+    font-size:10px;
+    color:var(--white-dim);
+    transition:color .2s;
+    position:relative;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .bottom-nav-item.active{color:var(--red-bright);}
+  .bottom-nav-item .bn-icon{font-size:18px;line-height:1;}
+  .bottom-nav-item .bn-label{font-size:9px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;}
+  .bottom-nav-item .bn-badge{
+    position:absolute;top:6px;
+    right:50%;transform:translateX(6px);
+    background:var(--red-bright);
+    color:#fff;font-size:9px;font-weight:700;
+    padding:1px 5px;border-radius:10px;
+    min-width:16px;text-align:center;
+    line-height:14px;
+  }
+
+  /* Compensate for bottom nav on mobile */
+  @media(max-width:768px){
+    .main{padding-bottom:60px;}
   }
   /* ─── DETAIL CARD ─── */
   .detail-card{
@@ -588,6 +739,9 @@
 </style>
 </head>
 <body>
+
+<!-- ─── SIDEBAR OVERLAY ─── -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- ─── SIDEBAR ─── -->
 <aside class="sidebar" id="sidebar">
@@ -641,6 +795,9 @@
 <!-- ─── MAIN ─── -->
 <main class="main">
   <div class="topbar">
+    <div class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </div>
     <div class="topbar-title" id="topbar-title">Dashboard</div>
     <div class="topbar-search">
       <span>🔍</span>
@@ -1029,6 +1186,30 @@
   </div>
 </div>
 
+<!-- ─── BOTTOM NAV (mobile) ─── -->
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bottom-nav-item active" id="bn-dashboard" onclick="nav('dashboard')">
+    <span class="bn-icon">⬛</span>
+    <span class="bn-label">Início</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-clientes" onclick="nav('clientes')">
+    <span class="bn-icon">👤</span>
+    <span class="bn-label">Clientes</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-emprestimos" onclick="nav('emprestimos')">
+    <span class="bn-icon">💸</span>
+    <span class="bn-label">Emprést.</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-pagamentos" onclick="nav('pagamentos')">
+    <span class="bn-icon">💳</span>
+    <span class="bn-label">Pagamentos</span>
+  </div>
+  <div class="bottom-nav-item" id="bn-more" onclick="toggleSidebar()">
+    <span class="bn-icon">☰</span>
+    <span class="bn-label">Mais</span>
+  </div>
+</nav>
+
 <script>
 // ═══════════════════════════════════════
 //  STATE & STORAGE
@@ -1114,7 +1295,25 @@ function nav(p){
   const titles={dashboard:'Dashboard',clientes:'Clientes',emprestimos:'Empréstimos',
     pagamentos:'Pagamentos',inadimplentes:'Inadimplentes',relatorios:'Relatórios',configuracoes:'Configurações'};
   document.getElementById('topbar-title').textContent=titles[p]||p;
+  // sync bottom nav
+  document.querySelectorAll('.bottom-nav-item').forEach(el=>el.classList.remove('active'));
+  const bnEl=document.getElementById('bn-'+p);
+  if(bnEl)bnEl.classList.add('active');
+  // close sidebar on mobile after navigation
+  closeSidebar();
   renderPage(p);
+}
+
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const o=document.getElementById('sidebar-overlay');
+  const isOpen=s.classList.contains('open');
+  if(isOpen){closeSidebar();}else{s.classList.add('open');o.classList.add('open');}
+}
+
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
 }
 
 function renderPage(p){
@@ -1682,6 +1881,13 @@ function updateBadges(){
   const inadim=DB.emprestimos.filter(e=>statusEmp(e).txt==='Em Atraso').length;
   document.getElementById('badge-inadimplentes').textContent=inadim;
   document.getElementById('notif-dot').style.display=inadim?'block':'none';
+  // update bottom nav badge
+  const bnEmp=document.getElementById('bn-emprestimos');
+  let bnBadge=bnEmp.querySelector('.bn-badge');
+  if(inadim>0){
+    if(!bnBadge){bnBadge=document.createElement('span');bnBadge.className='bn-badge';bnEmp.appendChild(bnBadge);}
+    bnBadge.textContent=inadim;
+  }else if(bnBadge){bnBadge.remove();}
 }
 
 // ═══════════════════════════════════════
